@@ -29,7 +29,61 @@ const gameBoard = ((mark1, mark2) => {
 
         let candidateWinner = boardState[0];
 
-        if (candidateWinner === boardState[1] && candidateWinner === boardState[2]) return candidateWinner;
+        /* Cases X X X 
+                 X X ?
+                 X ? X 
+        */
+
+        if (candidateWinner !== " ") {
+            if (candidateWinner === boardState[1] && candidateWinner === boardState[2]) return candidateWinner;
+            if (candidateWinner === boardState[3] && candidateWinner === boardState[6]) return candidateWinner;
+            if (candidateWinner === boardState[4] && candidateWinner === boardState[8]) return candidateWinner;
+        }
+
+        candidateWinner = boardState[1];
+
+        /* Cases ? X ? 
+                 ? X ?
+                 ? X ? 
+        */
+
+        if (candidateWinner !== " ") {
+            if (candidateWinner === boardState[4] && candidateWinner === boardState[7]) return candidateWinner;
+        }
+
+        candidateWinner = boardState[2];
+
+        /* Cases ? ? X 
+                 ? X X
+                 X ? X 
+        */
+
+        if (candidateWinner !== " ") {
+            if (candidateWinner === boardState[4] && candidateWinner === boardState[6]) return candidateWinner;
+            if (candidateWinner === boardState[5] && candidateWinner === boardState[8]) return candidateWinner;
+        }
+        
+        candidateWinner = boardState[3];
+        
+        /* Cases ? ? ? 
+                 X X X
+                 ? ? ? 
+        */
+
+        if (candidateWinner !== " ") {
+            if (candidateWinner === boardState[4] && candidateWinner === boardState[5]) return candidateWinner;
+        }
+
+        /* Cases ? ? ? 
+                 ? ? ?
+                 X X X 
+        */
+
+        candidateWinner = boardState[6];
+
+        if (candidateWinner !== " ") {
+            if (candidateWinner === boardState[7] && candidateWinner === boardState[8]) return candidateWinner;
+        }
 
         return " ";
 
@@ -59,3 +113,4 @@ gameBoard.addMark(4);
 gameBoard.addMark(2);
 
 console.log(gameBoard.getBoardState())
+console.log(gameBoard.checkWinner())
