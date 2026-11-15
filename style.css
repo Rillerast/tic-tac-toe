@@ -5,3 +5,30 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.board {
+    background-color: aqua;
+    width: 600px;
+    height: 600px;
+    box-shadow: 0 5px 10px black;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    border: 2px solid black;
+}
+
+.tile {
+    border: 2px solid black;
+    font-size: 10rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

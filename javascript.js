@@ -15,6 +15,7 @@ const gameBoard = ((mark1, mark2) => {
         // Adding the mark and changing the turn in the same method
         boardState[position] = playerTurn;
         playerTurn = playerTurn === mark1 ? mark2 : mark1;
+        return playerTurn;
     }
 
     const getBoardState = () => {
@@ -106,11 +107,36 @@ function player(name, mark) {
     return {getName, getMark};
 }
 
-gameBoard.addMark(0);
-gameBoard.addMark(3);
-gameBoard.addMark(1);
-gameBoard.addMark(4);
-gameBoard.addMark(2);
+const boardRenderer = (() => {
 
-console.log(gameBoard.getBoardState())
-console.log(gameBoard.checkWinner())
+    const renderNewTiles = () => {
+        let board = document.querySelector(".board");
+
+        if (board.firstElementChild !== null) {
+            board.remove();
+            board = document.createElement("div");
+            board.classList.add("board");
+
+            document.querySelector("body").appendChild(board);
+        }
+
+        for (let i = 0; i < 9; i++) {
+            const tile = document.createElement("div");
+            tile.classList.add("tile");
+            tile.innerText = gameBoard.getBoardState()[i];
+            board.appendChild(tile);
+
+            tile.addEventListener("click", (_event) => {
+                if (tile.innerText === "") {
+                    console.log("aa")
+                    tile.innerText = gameBoard.addMark(i);
+                }
+            });
+        }
+    }
+
+    return {renderNewTiles};
+
+})();
+
+boardRenderer.renderNewTiles();
