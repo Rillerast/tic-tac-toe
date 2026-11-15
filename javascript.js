@@ -4,9 +4,9 @@ const player2 = player("Lisajin", "O");
 const gameBoard = ((mark1, mark2) => {
 
     const boardState = [
-        " ", " ", " ",
-        " ", " ", " ",
-        " ", " ", " "
+        "", "", "",
+        "", "", "",
+        "", "", ""
     ];
 
     let playerTurn = Math.random() < 0.5 ? mark1 : mark2;
@@ -22,6 +22,12 @@ const gameBoard = ((mark1, mark2) => {
         return boardState;
     }
 
+    const resetBoardState = () => {
+        for (let i = 0; i < 9; i++) {
+            boardState[i] = "";
+        }
+    }
+
     const getPlayerTurn = () => {
         return playerTurn;
     }
@@ -35,7 +41,7 @@ const gameBoard = ((mark1, mark2) => {
                  X ? X 
         */
 
-        if (candidateWinner !== " ") {
+        if (candidateWinner) {
             if (candidateWinner === boardState[1] && candidateWinner === boardState[2]) return candidateWinner;
             if (candidateWinner === boardState[3] && candidateWinner === boardState[6]) return candidateWinner;
             if (candidateWinner === boardState[4] && candidateWinner === boardState[8]) return candidateWinner;
@@ -48,7 +54,7 @@ const gameBoard = ((mark1, mark2) => {
                  ? X ? 
         */
 
-        if (candidateWinner !== " ") {
+        if (candidateWinner) {
             if (candidateWinner === boardState[4] && candidateWinner === boardState[7]) return candidateWinner;
         }
 
@@ -59,7 +65,7 @@ const gameBoard = ((mark1, mark2) => {
                  X ? X 
         */
 
-        if (candidateWinner !== " ") {
+        if (candidateWinner) {
             if (candidateWinner === boardState[4] && candidateWinner === boardState[6]) return candidateWinner;
             if (candidateWinner === boardState[5] && candidateWinner === boardState[8]) return candidateWinner;
         }
@@ -71,7 +77,7 @@ const gameBoard = ((mark1, mark2) => {
                  ? ? ? 
         */
 
-        if (candidateWinner !== " ") {
+        if (candidateWinner) {
             if (candidateWinner === boardState[4] && candidateWinner === boardState[5]) return candidateWinner;
         }
 
@@ -82,15 +88,15 @@ const gameBoard = ((mark1, mark2) => {
 
         candidateWinner = boardState[6];
 
-        if (candidateWinner !== " ") {
+        if (candidateWinner) {
             if (candidateWinner === boardState[7] && candidateWinner === boardState[8]) return candidateWinner;
         }
 
-        return " ";
+        return "";
 
     }
 
-    return {addMark, getBoardState, getPlayerTurn, checkWinner};
+    return {addMark, getBoardState, resetBoardState, getPlayerTurn, checkWinner};
 
 })(player1.getMark(), player2.getMark());
 
@@ -118,6 +124,17 @@ const boardRenderer = (() => {
             board.classList.add("board");
 
             document.querySelector("body").appendChild(board);
+
+            document.querySelector(".reset").remove()
+            const resetButton = document.createElement("button");
+            resetButton.classList.add("reset");
+            resetButton.innerText = "Reset game";
+            document.querySelector("body").appendChild(resetButton);
+
+            resetButton.addEventListener("click", (_event) => {
+                gameBoard.resetBoardState();
+                boardRenderer.renderNewTiles();
+            });
         }
 
         for (let i = 0; i < 9; i++) {
@@ -127,9 +144,10 @@ const boardRenderer = (() => {
             board.appendChild(tile);
 
             tile.addEventListener("click", (_event) => {
-                if (tile.innerText === "") {
-                    console.log("aa")
+                if (!tile.innerText && !gameBoard.checkWinner()) {
                     tile.innerText = gameBoard.addMark(i);
+                } else if (gameBoard.checkWinner()) {
+                    // I have to announce a winner somehow
                 }
             });
         }
@@ -140,3 +158,8 @@ const boardRenderer = (() => {
 })();
 
 boardRenderer.renderNewTiles();
+
+document.querySelector(".reset").addEventListener("click", (_event) => {
+    gameBoard.resetBoardState();
+    boardRenderer.renderNewTiles();
+});
