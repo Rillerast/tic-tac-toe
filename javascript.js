@@ -1,5 +1,5 @@
-const player1 = player("Hazerin", "X");
-const player2 = player("Lisajin", "O");
+const player1 = player(prompt("Insert player 1 name"), "X");
+const player2 = player(prompt("Insert player 2 name"), "O");
 
 const gameBoard = ((mark1, mark2) => {
 
