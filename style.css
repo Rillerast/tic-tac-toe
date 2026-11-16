@@ -41,3 +41,8 @@ body {
     border-radius: 9999px;
     background-color: cyan;
 }
+
+.info {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}

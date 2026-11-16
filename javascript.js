@@ -15,7 +15,8 @@ const gameBoard = ((mark1, mark2) => {
         // Adding the mark and changing the turn in the same method
         boardState[position] = playerTurn;
         playerTurn = playerTurn === mark1 ? mark2 : mark1;
-        return playerTurn;
+        document.querySelector(".info").innerText = `Mark ${gameBoard.getPlayerTurn()}: ${player1.getNameByMark(gameBoard.getPlayerTurn())}${player2.getNameByMark(gameBoard.getPlayerTurn())}`
+        return boardState[position];
     }
 
     const getBoardState = () => {
@@ -30,6 +31,10 @@ const gameBoard = ((mark1, mark2) => {
 
     const getPlayerTurn = () => {
         return playerTurn;
+    }
+
+    const resetPlayerTurn = () => {
+        playerTurn = Math.random() < 0.5 ? mark1 : mark2;
     }
 
     const checkWinner = () => {
@@ -96,7 +101,7 @@ const gameBoard = ((mark1, mark2) => {
 
     }
 
-    return {addMark, getBoardState, resetBoardState, getPlayerTurn, checkWinner};
+    return {addMark, getBoardState, resetBoardState, getPlayerTurn, resetPlayerTurn, checkWinner};
 
 })(player1.getMark(), player2.getMark());
 
@@ -110,7 +115,15 @@ function player(name, mark) {
         return mark;
     }
 
-    return {getName, getMark};
+    const getNameByMark = (markToEvaluate) => {
+        if (mark === markToEvaluate) {
+            return name;
+        }
+        
+        return "";
+    }
+
+    return {getName, getMark, getNameByMark};
 }
 
 const boardRenderer = (() => {
@@ -133,7 +146,9 @@ const boardRenderer = (() => {
 
             resetButton.addEventListener("click", (_event) => {
                 gameBoard.resetBoardState();
+                gameBoard.resetPlayerTurn();
                 boardRenderer.renderNewTiles();
+                document.querySelector(".info").innerText = `Mark ${gameBoard.getPlayerTurn()}: ${player1.getNameByMark(gameBoard.getPlayerTurn())}${player2.getNameByMark(gameBoard.getPlayerTurn())}`;
             });
         }
 
@@ -146,8 +161,9 @@ const boardRenderer = (() => {
             tile.addEventListener("click", (_event) => {
                 if (!tile.innerText && !gameBoard.checkWinner()) {
                     tile.innerText = gameBoard.addMark(i);
-                } else if (gameBoard.checkWinner()) {
-                    // I have to announce a winner somehow
+                } 
+                if (gameBoard.checkWinner()) {
+                    document.querySelector(".info").innerText = `Mark ${gameBoard.checkWinner()}: ${player1.getNameByMark(gameBoard.checkWinner())}${player2.getNameByMark(gameBoard.checkWinner())} won the game!`
                 }
             });
         }
@@ -161,5 +177,9 @@ boardRenderer.renderNewTiles();
 
 document.querySelector(".reset").addEventListener("click", (_event) => {
     gameBoard.resetBoardState();
+    gameBoard.resetPlayerTurn();
     boardRenderer.renderNewTiles();
+    document.querySelector(".info").innerText = `Mark ${gameBoard.getPlayerTurn()}: ${player1.getNameByMark(gameBoard.getPlayerTurn())}${player2.getNameByMark(gameBoard.getPlayerTurn())}`;
 });
+
+document.querySelector(".info").innerText = `Mark ${gameBoard.getPlayerTurn()}: ${player1.getNameByMark(gameBoard.getPlayerTurn())}${player2.getNameByMark(gameBoard.getPlayerTurn())}`;
